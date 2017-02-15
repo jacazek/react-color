@@ -1,10 +1,16 @@
 import React, { Component, PureComponent } from 'react'
+import ReactDOM from 'react-dom'
 import reactCSS from 'reactcss'
 import * as alpha from '../../helpers/alpha'
 
 import Checkboard from './Checkboard'
 
 export class Alpha extends (PureComponent || Component) {
+  componentDidMount() {
+    this.document = ReactDOM.findDOMNode(this).ownerDocument;
+    this.window = this.document.defaultView;
+  }
+  
   componentWillUnmount() {
     this.unbindEventListeners()
   }
@@ -15,6 +21,7 @@ export class Alpha extends (PureComponent || Component) {
   }
 
   handleMouseDown = (e) => {
+    const { window } = this;
     this.handleChange(e, true)
     window.addEventListener('mousemove', this.handleChange)
     window.addEventListener('mouseup', this.handleMouseUp)
@@ -25,6 +32,7 @@ export class Alpha extends (PureComponent || Component) {
   }
 
   unbindEventListeners = () => {
+    const { window } = this;
     window.removeEventListener('mousemove', this.handleChange)
     window.removeEventListener('mouseup', this.handleMouseUp)
   }

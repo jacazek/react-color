@@ -1,8 +1,14 @@
 import React, { Component, PureComponent } from 'react'
+import ReactDOM from 'react-dom'
 import reactCSS from 'reactcss'
 import * as hue from '../../helpers/hue'
 
 export class Hue extends (PureComponent || Component) {
+  componentDidMount() {
+    this.document = ReactDOM.findDOMNode(this).ownerDocument;
+    this.window = this.document.defaultView;
+  }
+  
   componentWillUnmount() {
     this.unbindEventListeners()
   }
@@ -13,6 +19,7 @@ export class Hue extends (PureComponent || Component) {
   }
 
   handleMouseDown = (e) => {
+    const { window } = this;
     this.handleChange(e, true)
     window.addEventListener('mousemove', this.handleChange)
     window.addEventListener('mouseup', this.handleMouseUp)
@@ -23,6 +30,7 @@ export class Hue extends (PureComponent || Component) {
   }
 
   unbindEventListeners() {
+    const { window } = this;
     window.removeEventListener('mousemove', this.handleChange)
     window.removeEventListener('mouseup', this.handleMouseUp)
   }

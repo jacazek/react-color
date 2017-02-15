@@ -1,4 +1,5 @@
 import React, { Component, PureComponent } from 'react'
+import ReactDOM from 'react-dom'
 import reactCSS from 'reactcss'
 import throttle from 'lodash/throttle'
 import * as saturation from '../../helpers/saturation'
@@ -10,6 +11,11 @@ export class Saturation extends (PureComponent || Component) {
     this.throttle = throttle((fn, data, e) => {
       fn(data, e)
     }, 50)
+  }
+  
+  componentDidMount() {
+    this.document = ReactDOM.findDOMNode(this).ownerDocument;
+    this.window = this.document.defaultView;
   }
 
   componentWillUnmount() {
@@ -25,6 +31,7 @@ export class Saturation extends (PureComponent || Component) {
   }
 
   handleMouseDown = (e) => {
+    const { window } = this;
     this.handleChange(e, true)
     window.addEventListener('mousemove', this.handleChange)
     window.addEventListener('mouseup', this.handleMouseUp)
@@ -35,6 +42,7 @@ export class Saturation extends (PureComponent || Component) {
   }
 
   unbindEventListeners() {
+    const { window } = this;
     window.removeEventListener('mousemove', this.handleChange)
     window.removeEventListener('mouseup', this.handleMouseUp)
   }
