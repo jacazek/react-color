@@ -1,4 +1,5 @@
-import React, { Component, PureComponent } from 'react'
+import React, { Component, PureComponent } from 'react';
+import ReactDOM from 'react-dom';
 import reactCSS from 'reactcss'
 
 export class EditableInput extends (PureComponent || Component) {
@@ -9,6 +10,11 @@ export class EditableInput extends (PureComponent || Component) {
       value: String(props.value).toUpperCase(),
       blurValue: String(props.value).toUpperCase(),
     }
+  }
+  
+  componentDidMount() {
+    this.document = ReactDOM.findDOMNode(this).ownerDocument;
+    this.window = this.document.defaultView;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -81,6 +87,7 @@ export class EditableInput extends (PureComponent || Component) {
   }
 
   handleMouseDown = (e) => {
+    const { window } = this;
     if (this.props.dragLabel) {
       e.preventDefault()
       this.handleDrag(e)
@@ -94,6 +101,7 @@ export class EditableInput extends (PureComponent || Component) {
   }
 
   unbindEventListeners = () => {
+    const { window } = this;
     window.removeEventListener('mousemove', this.handleDrag)
     window.removeEventListener('mouseup', this.handleMouseUp)
   }
